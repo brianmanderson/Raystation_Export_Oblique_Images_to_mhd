@@ -54,7 +54,8 @@ def export_image(path,case,exam):
     return None
 
 
-def main(base_export_path, MRNs=None):
+def main(base_export_path=None, MRNs=None):
+    assert base_export_path is not None and MRNs is not None, "Need to pass both variables"
     assert type(MRNs) is list, 'Pass a list of MRNs to run'
     if not os.path.exists(base_export_path):
         os.makedirs(base_export_path)
@@ -91,4 +92,5 @@ def main(base_export_path, MRNs=None):
 
 if __name__ == '__main__':
     MRNs = None
-    main(MRNs)
+    base_export_path = None
+    main(base_export_path=base_export_path, MRNs=MRNs)
