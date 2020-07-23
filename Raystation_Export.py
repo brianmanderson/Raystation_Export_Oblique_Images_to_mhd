@@ -54,42 +54,23 @@ def export_image(path,case,exam):
     return None
 
 
-def check_roi_presence(base_roi):
-    roi_list = ['eye','lens','pituitary','brain','hippo','ventricle','nerve','chiasm']
-    ignore = ['mmm','trimesh','rigid','dir']
-    for roi in roi_list:
-        if max([base_roi.find(i) != -1 for i in ignore]):
-            continue
-        elif base_roi.find(roi) != -1:
-            return True
-    return False
-
-
-def main():
+def main(base_export_path, MRNs=None):
+    assert type(MRNs) is list, 'Pass a list of MRNs to run'
+    if not os.path.exists(base_export_path):
+        os.makedirs(base_export_path)
     change_patient_class = Change_Patient()
-    base_path = r'\\mymdafiles\di_data1\Morfeus\bmanderson\CNN\Data\Data_Chung_Brain\Redone_Contours'
-    MRNs = []
-    fid = open(os.path.join(base_path,'patients.csv'))
-    for _ in range(10):
-        fid.readline()
-    for line in fid:
-        line = line.strip('\n')
-        MRNs.append(line)
-    fid.close()
-    MRNs = ['853618']
     for MRN in MRNs:
         patient = change_patient_class.ChangePatient(MRN)
         for case in patient.Cases:
             exam_grid_settings = {}
             rois_in_case = []
             for roi in case.PatientModel.RegionsOfInterest:
-                if roi.Name.find('_') != -1 and check_roi_presence(roi.Name.lower()):
-                    rois_in_case.append(roi.Name)
+                rois_in_case.append(roi.Name)
             for roi in rois_in_case:
                 for exam in case.Examinations:
                     if exam.Name.find('MR') == -1:
                         continue
-                    out_path = os.path.join(base_path, MRN, case.CaseName, exam.Name)
+                    out_path = os.path.join(base_export_path, MRN, case.CaseName, exam.Name)
                     if os.path.exists(os.path.join(out_path,roi+'.mhd')):
                         continue
                     elif case.PatientModel.StructureSets[exam.Name].RoiGeometries[roi].HasContours():
@@ -109,4 +90,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    MRNs = None
+    main(MRNs)
