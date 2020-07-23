@@ -58,6 +58,7 @@ def export_image(path,case,exam):
 def main(base_export_path=None, MRNs=None):
     assert base_export_path is not None and MRNs is not None, "Need to pass both variables"
     assert type(MRNs) is list, 'Pass a list of MRNs to run'
+    MRNs = [str(i) for i in MRNs]
     if not os.path.exists(base_export_path):
         os.makedirs(base_export_path)
     change_patient_class = Change_Patient()
