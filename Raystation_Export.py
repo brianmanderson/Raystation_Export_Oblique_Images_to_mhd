@@ -69,11 +69,11 @@ def main(base_export_path=None, MRNs=None):
             for roi in case.PatientModel.RegionsOfInterest:
                 rois_in_case.append(roi.Name)
             for roi in rois_in_case:
+                print(roi)
                 for exam in case.Examinations:
-                    if exam.Name.find('MR') == -1:
-                        continue
+                    print(exam.Name)
                     out_path = os.path.join(base_export_path, MRN, case.CaseName, exam.Name)
-                    if os.path.exists(os.path.join(out_path,roi+'.mhd')):
+                    if os.path.exists(os.path.join(out_path, '{}.mhd'.format(roi))):
                         continue
                     elif case.PatientModel.StructureSets[exam.Name].RoiGeometries[roi].HasContours():
                         if not os.path.exists(os.path.join(out_path,'Image.mhd')):
