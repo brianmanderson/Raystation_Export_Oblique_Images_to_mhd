@@ -16,6 +16,7 @@ def pull_wanted_items(line):
             wanted_items.append(item)
     return wanted_items
 
+
 def create_exam_specified_grid_settings(exam_path):
     output_dict = {'Corner': {}, 'VoxelSize': {}, 'NumberOfVoxels': 0}
     fid = open(exam_path)
